@@ -1,6 +1,6 @@
 # What is this?
 
-This is a simple little C program that converts tabs to spaces in a file, and printd the result
+This is a simple little C program that converts tabs to spaces in a file, and prints the result
 to stdout. That's about it. Not even that well-written, tbh, but whatever.
 
 # How do I use it?
