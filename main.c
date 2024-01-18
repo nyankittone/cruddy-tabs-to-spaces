@@ -64,38 +64,32 @@ void printFile(FILE *file, Parameters params) {
 }
 
 // THIS FUNCTION DOES NOT WORK WHATSOEVER. FUCK. SHIT. AAAAAAA.
+// WHY IS MY LSP NOT WORKING RIGHT NOW??? WTF?????????????
 void printFileSpacesToTabs(FILE *file, Parameters params) {
     if(!file) return;
 
-    // this is going to be some fuckin' HIIIIDEOUS code! EEEEEEEEEEEEEEEE
-    size_t spaces_left = params.spaces_per_tab, dup_spaces_left;
-    bool on_space = false;
+    size_t x_dist = 0, spaces = 0;
 
-    for(int character; (character = fgetc(file)) != EOF; spaces_left = (spaces_left - 1) % params.spaces_per_tab + 1) {
-        // if we encounter a space, then...
+    for(int character; (character = fgetc(file)) != EOF; x_dist = (x_dist + 1) % params.spaces_per_tab) {
         if(character == ' ') {
-            if(!on_space) dup_spaces_left = spaces_left;
-            on_space = true;
+            spaces++;
 
-            if(spaces_left == 1) {
+            if(x_dist == params.spaces_per_tab - 1) {
                 putchar('\t');
-                on_space = false; // ?
+                spaces = 0;
             }
-            
+
             continue;
         }
 
-        // in this if, we must take care of then tab expansion fails, I think.
-        if(on_space) {
-            printf("e");
-            for(size_t i = 0; i < dup_spaces_left; i++) {
+        if(spaces) {
+            for(; spaces > 0; spaces--) {
                 putchar(' ');
             }
-
-            on_space = false; // I fuckin' hope this shit is right...
         }
 
         putchar(character);
+        if(character == '\t' || character == '\n') x_dist = -1;
     }
 }
 
@@ -203,7 +197,7 @@ int main(int argc, char *argv[]) {
     if(printlnAndReturn(parseArgs(argc,argv,filenames,&parsed_args),stderr)) return EXIT_PARSE_ERROR;
 
     if(!*filenames) {
-        printFile(stdin,parsed_args);
+        printFileSpacesToTabs(stdin,parsed_args);
         return EXIT_SUCCESS;
     }
 
