@@ -63,7 +63,6 @@ void printFile(FILE *file, Parameters params) {
     }
 }
 
-// THIS FUNCTION DOES NOT WORK WHATSOEVER. FUCK. SHIT. AAAAAAA.
 // WHY IS MY LSP NOT WORKING RIGHT NOW??? WTF?????????????
 void printFileSpacesToTabs(FILE *file, Parameters params) {
     if(!file) return;
