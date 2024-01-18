@@ -63,6 +63,7 @@ void printFile(FILE *file, Parameters params) {
     }
 }
 
+// THIS FUNCTION DOES NOT WORK WHATSOEVER. FUCK. SHIT. AAAAAAA.
 void printFileSpacesToTabs(FILE *file, Parameters params) {
     if(!file) return;
 
@@ -86,6 +87,7 @@ void printFileSpacesToTabs(FILE *file, Parameters params) {
 
         // in this if, we must take care of then tab expansion fails, I think.
         if(on_space) {
+            printf("e");
             for(size_t i = 0; i < dup_spaces_left; i++) {
                 putchar(' ');
             }
