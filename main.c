@@ -63,6 +63,40 @@ void printFile(FILE *file, Parameters params) {
     }
 }
 
+void printFileSpacesToTabs(FILE *file, Parameters params) {
+    if(!file) return;
+
+    // this is going to be some fuckin' HIIIIDEOUS code! EEEEEEEEEEEEEEEE
+    size_t spaces_left = params.spaces_per_tab, dup_spaces_left;
+    bool on_space = false;
+
+    for(int character; (character = fgetc(file)) != EOF; spaces_left = (spaces_left - 1) % params.spaces_per_tab + 1) {
+        // if we encounter a space, then...
+        if(character == ' ') {
+            if(!on_space) dup_spaces_left = spaces_left;
+            on_space = true;
+
+            if(spaces_left == 1) {
+                putchar('\t');
+                on_space = false; // ?
+            }
+            
+            continue;
+        }
+
+        // in this if, we must take care of then tab expansion fails, I think.
+        if(on_space) {
+            for(size_t i = 0; i < dup_spaces_left; i++) {
+                putchar(' ');
+            }
+
+            on_space = false; // I fuckin' hope this shit is right...
+        }
+
+        putchar(character);
+    }
+}
+
 int printFiles(char **filenames, Parameters params) {
     if(!filenames || !*filenames) return EXIT_SUCCESS;
 

@@ -33,7 +33,7 @@ $(OBJ)/%.o: $(SRC)/%.c | $(OBJ)
 $(DEV_OBJ)/%.o: $(SRC)/%.c | $(DEV_OBJ)
 	$(CC) $(CFLAGS) $(DEV_FLAGS) -c $< -o $@
 
-main.o: main.c
+$(EXE).o: main.c
 	$(CC) $(CFLAGS) $(RELEASE_FLAGS) -c $< -o $@
 
 $(DEV_EXE).o: main.c
