@@ -83,9 +83,13 @@ void printFileSpacesToTabs(FILE *file, Parameters params) {
         }
 
         if(spaces) {
-            for(; spaces > 0; spaces--) {
-                putchar(' ');
+            if(character != '\t') {
+                for(size_t i = 0; i < spaces; i++) {
+                    putchar(' ');
+                }
             }
+
+            spaces = 0;
         }
 
         putchar(character);
