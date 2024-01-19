@@ -21,7 +21,7 @@ DEV_OBJS := $(patsubst $(SRC)/%.c,$(DEV_OBJ)/%.o,$(SRCS))
 
 all: $(EXE)
 
-$(EXE): $(OBJS) main.o
+$(EXE): $(OBJS) $(EXE).o
 	$(CC) $(CFLAGS) $(RELEASE_FLAGS) $^ -o $@
 
 $(DEV_EXE): $(DEV_OBJS) $(DEV_EXE).o
