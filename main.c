@@ -21,6 +21,7 @@ typedef enum {
     EXIT_CANT_OPEN_FILE,
     EXIT_TOO_MANY_ARGS,
     EXIT_PARSE_ERROR,
+    EXIT_NO_MODE_SPECIFIED,
     EXIT_OUT_OF_MEM,
 } ExitCode;
 
@@ -35,7 +36,7 @@ typedef struct {
     size_t spaces_per_tab;
 } Parameters;
 
-void printFile(FILE *file, Parameters params) {
+void printFileTabsToSpaces(FILE *file, Parameters params) {
     if(!file) return;
 
     // tabs to spaces
@@ -92,14 +93,14 @@ void printFileSpacesToTabs(FILE *file, Parameters params) {
     }
 }
 
-int printFiles(char **filenames, Parameters params) {
+int printFiles(char **filenames, Parameters params, void (*converterFunction)(FILE*,Parameters)) {
     if(!filenames || !*filenames) return EXIT_SUCCESS;
 
     int returned = EXIT_SUCCESS;
 
     for(char **filename = filenames; *filename; filename++) {
         if(!strcmp(*filename,"-")) {
-            printFile(stdin,params);
+            converterFunction(stdin,params);
             continue;
         }
 
@@ -110,7 +111,7 @@ int printFiles(char **filenames, Parameters params) {
             continue;
         }
 
-        printFile(file,params);
+        converterFunction(file,params);
         fclose(file);
     }
 
@@ -195,11 +196,15 @@ int main(int argc, char *argv[]) {
     Parameters parsed_args;
     if(printlnAndReturn(parseArgs(argc,argv,filenames,&parsed_args),stderr)) return EXIT_PARSE_ERROR;
 
+    if(!parsed_args.mode) die(EXIT_NO_MODE_SPECIFIED,"No option for specifying tabs or spaces specified!");
+    void (*converterFunction)(FILE*,Parameters) = parsed_args.mode == TO_TABS ?
+        &printFileSpacesToTabs : &printFileTabsToSpaces;
+
     if(!*filenames) {
-        printFileSpacesToTabs(stdin,parsed_args);
+        converterFunction(stdin,parsed_args);
         return EXIT_SUCCESS;
     }
 
-    return printFiles(filenames,parsed_args);
+    return printFiles(filenames,parsed_args,converterFunction);
 }
 
